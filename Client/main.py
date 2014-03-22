@@ -18,35 +18,34 @@ testgrid = [[wall,wall,wall,water,wall,wall,wall,wall],
 		    [wall,wall,wall,water,wall,wall,wall,wall]]
 
 
+class battlemap:
+	def __init__(self, xsize, ysize):
+		self.gridsize = (10, 8)
+		self.cellsize = (60, 60)
+		self.size = width, height = self.gridsize[0]*self.cellsize[0], self.gridsize[1]*self.cellsize[1]
+		self.screen = pygame.display.set_mode(self.size)
+		self.grid = [[0 for x in xrange(self.gridsize[1])] for x in xrange(self.gridsize[0])] 
+
+	def update(self):
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT: sys.exit()
+
+		self.screen.fill((0,0,0))
+
+		## update grid objects in grid
+		for x in xrange(self.gridsize[0]):
+			for y in xrange(self.gridsize[1]):
+				self.grid[x][y] = testgrid[x][y]
+
+		## render new object set
+		for x in xrange(self.gridsize[0]):
+			for y in xrange(self.gridsize[1]):
+				self.screen.blit(self.grid[x][y], (x*self.cellsize[0], y*self.cellsize[1]))
+
+		## update frame
+		pygame.display.flip()
 
 
-gridsize = (10, 8)
-cellsize = (60, 60)
-
-size = width, height = gridsize[0]*cellsize[0], gridsize[1]*cellsize[1]
-
-screen = pygame.display.set_mode(size)
-
-wall = pygame.image.load("./lib/wall.png")
-wallrect = wall.get_rect()
-
-grid = [[0 for x in xrange(gridsize[1])] for x in xrange(gridsize[0])] 
-
-while 1:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT: sys.exit()
-
-	screen.fill((0,0,0))
-
-	## update grid objects in grid
-	for x in xrange(gridsize[0]):
-		for y in xrange(gridsize[1]):
-			grid[x][y] = testgrid[x][y]
-
-	## render new object set
-	for x in xrange(gridsize[0]):
-		for y in xrange(gridsize[1]):
-			screen.blit(grid[x][y], (x*cellsize[0], y*cellsize[1]))
-
-	## update frame
-	pygame.display.flip()
+bmap = battlemap(10,8)
+while(1):
+	bmap.update()
