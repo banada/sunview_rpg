@@ -38,19 +38,19 @@ class terrain:
     
 #Map: 2D set of terrain points
 def create_map(x_dim, y_dim):
-    map = []
+    map_1 = []
     for i in range(0,x_dim):
         x = []
         for ii in range(0,y_dim):
-            x.append(terrain(i, ii, "grass"))
-        map.append(x)
-    print map
+            terr = terrain(i, ii, "grass")
+            x.append(terr)
+        map_1.append(x)
+    print map_1[0][0].ttype
+    map_1[0][0].update("door")
+    print map_1[0][0].ttype
 
 #Testing
 ptf = character("Perezoso the Folivore", 0, 0, 1)
 ptf.update(1,1,0)
-
-t1 = terrain(0,0,"wall")
-t1.update("door")
 
 create_map(5,5)
