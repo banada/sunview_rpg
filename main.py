@@ -1,7 +1,9 @@
 import os, sys, pygame
 from db_init import *
+import msvcrt as m
 import glob
 pygame.init()
+
 
 def loadImageDict():
 	global imgDict
@@ -13,15 +15,19 @@ def loadImageDict():
 	print imgDict
 
 class battlemap:
-	def __init__(self, xsize, ysize):
-		self.gridsize = (10, 8)
-		self.cellsize = (60, 60)
-		self.size = width, height = self.gridsize[0]*self.cellsize[0], self.gridsize[1]*self.cellsize[1]
+	def __init__(self, xsize, ysize, isdm):
+		self.gridsize = (xsize, ysize)
+		self.cellsize = (30, 30)
+		if isdm:
+			self.size = width, height = self.gridsize[0]*self.cellsize[0]+ 200, self.gridsize[1]*self.cellsize[1]
+		else:
+			self.size = width, height = self.gridsize[0]*self.cellsize[0], self.gridsize[1]*self.cellsize[1]
 		self.screen = pygame.display.set_mode(self.size)
 		loadImageDict()
 		self.grid = [[0 for x in xrange(self.gridsize[1])] for x in xrange(self.gridsize[0])] 
 		self.testgrid = [[0 for x in xrange(self.gridsize[1])] for x in xrange(self.gridsize[0])] 
 		self.charlist = []
+		self.testcharlist = []
 
 		self.create_testgrid()
 
@@ -29,12 +35,15 @@ class battlemap:
 		## update grid objects in grid
 		for x in xrange(self.gridsize[0]):
 			for y in xrange(self.gridsize[1]):
-				if (y+x)%3 == 0:
+				if (y*x)%3 == 0:
 					self.testgrid[x][y] = terrain(x,y,'water')
-				elif (y+x)%3 == 1:
-					self.testgrid[x][y] = terrain(x,y,'grass')
-				elif (y+x)%3 == 2:
+				elif (y*x)%3 == 1:
+					self.testgrid[x][y] = terrain(x,y,'door')
+				elif (y*x)%3 == 2:
 					self.testgrid[x][y] = terrain(x,y,'wall')
+
+		self.testcharlist.append(character("testchar", "redtri", 0, 0, 30))
+		self.testcharlist.append(character("testchar", "redtri", 5, 5, 30))
 
 	def update(self):
 		for event in pygame.event.get():
@@ -52,13 +61,59 @@ class battlemap:
 			for y in xrange(self.gridsize[1]):
 				self.screen.blit(imgDict[self.grid[x][y].ttype], (x*self.cellsize[0], y*self.cellsize[1]))
 
+		## GET FULL CHARLIST
+		self.charlist = self.testcharlist
+
 		for x in xrange(len(self.charlist)):
-			self.screen.blit(imgDict[self.charlist[x].img])
+			self.screen.blit(imgDict[self.charlist[x].type],(self.charlist[x].x*self.cellsize[0],self.charlist[x].y*self.cellsize[1]))
 
 		## update frame
 		pygame.display.flip()
 
+	def movecurchar(self, key):
+		direction = key
+		if direction is 113:
+			if self.charlist[0].x-1 >= 0 and self.charlist[0].y-1 >= 0:
+				self.testcharlist[0].update(self.charlist[0].x-1,self.charlist[0].y-1)
+		elif direction is 119:
+			if self.charlist[0].y-1 >= 0:
+				self.testcharlist[0].update(self.charlist[0].x,self.charlist[0].y-1)
+		elif direction is 101:
+			if self.charlist[0].x+1 < self.gridsize[0] and self.charlist[0].y-1 >= 0:
+				self.testcharlist[0].update(self.charlist[0].x+1,self.charlist[0].y-1)
+		elif direction is 97:
+			if self.charlist[0].x-1 >= 0:
+				self.testcharlist[0].update(self.charlist[0].x-1,self.charlist[0].y)
+		elif direction is 100:
+			if self.charlist[0].x+1 < self.gridsize[0]:
+				self.testcharlist[0].update(self.charlist[0].x+1,self.charlist[0].y)
+		elif direction is 122:
+			if self.charlist[0].x-1 >= 0 and self.charlist[0].y+1 < self.gridsize[1]:
+				self.testcharlist[0].update(self.charlist[0].x-1,self.charlist[0].y+1)
+		elif direction is 120:
+			if self.charlist[0].y+1 < self.gridsize[1]:
+				print self.charlist[0].y-1, self.gridsize[1]
+				self.testcharlist[0].update(self.charlist[0].x,self.charlist[0].y+1)
+		elif direction is 99:
+			if self.charlist[0].x+1 < self.gridsize[0] and self.charlist[0].y+1 < self.gridsize[1]:
+				self.testcharlist[0].update(self.charlist[0].x+1,self.charlist[0].y+1)
 
-bmap = battlemap(10,8)
-while(1):
-	bmap.update()
+	def endturn(self):
+		oldchar = self.charlist.pop(0)
+		self.charlist.append(oldchar)
+
+def main():
+	bmap = battlemap(36,26,1)
+	while(1):
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				return
+			elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:			
+				return
+			elif event.type == pygame.KEYDOWN and event.key == 13:#enter	
+				bmap.endturn()
+			elif event.type == pygame.KEYDOWN:
+				bmap.movecurchar(event.key)
+		bmap.update()
+
+main()
