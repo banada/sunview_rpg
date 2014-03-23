@@ -58,15 +58,16 @@ class character:
         self.update(str(j['x']), str(j['y']), str(j['speed']), str(j['is_current']), str(j['initiative']))
 
     def post(self):
-        data = json.dumps({'name':str(self.name),
-                       'safe_name':str(self.safe_name),
-                       'ctype':str(self.ctype),
-                       'x':str(self.x), 
-                       'y':str(self.y),
-                       'speed':str(self.speed),
-                       'is_player':str(self.is_player),
-                       'is_current':str(self.is_current),
-                       'initiative':str(self.initiative)})
+        data = json.dumps({'class':'character',
+                           'name':str(self.name),
+                           'safe_name':str(self.safe_name),
+                           'ctype':str(self.ctype),
+                           'x':str(self.x), 
+                           'y':str(self.y),
+                           'speed':str(self.speed),
+                           'is_player':str(self.is_player),
+                           'is_current':str(self.is_current),
+                           'initiative':str(self.initiative)})
         request = requests.post('http://localhost:8080/post', data=data)
 
 #Points on the grid
@@ -94,6 +95,21 @@ class terrain:
                        'y':str(self.y),
                        'ttype':str(self.ttype)}, outfile)
 
+    def get(self):
+        data = "JSON/"+str(self.x)+"_"+str(self.y)+".json"
+        request = requests.get('http://localhost:8080/post', data=data)
+        j = json.loads(request.text)
+        self.update(str(j['ttype']))
+
+    def post(self):
+        data = json.dumps({'class':'terrain',
+                           'x':str(self.x),
+                           'y':str(self.y),
+                           'ttype':str(self.ttype)})
+        request = requests.post('http://localhost:8080/post', data=data)
+
+
+
 #Map: 2D set of terrain points
 def create_map(x_dim, y_dim):
     map_1 = []
@@ -108,8 +124,10 @@ def create_map(x_dim, y_dim):
     print map_1[0][0].ttype
 
 #Testing
-ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
+#ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
 ##ptf.update(1,1,0)
-ptf.get()
+#ptf.get()
+t = terrain(5,5,"grass")
+t.post()
 ##create_map(5,5)
 
