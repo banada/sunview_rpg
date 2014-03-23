@@ -52,7 +52,7 @@ class character:
                        'initiative':str(self.initiative)}, outfile)
 
     def get(self):
-        request = requests.get('http://localhost:8000/JSON/'+self.safe_name)
+        request = requests.get('http://localhost:8080/JSON/'+self.safe_name)
         j = json.loads(request.text)
         self.update(str(j['x']), str(j['y']), str(j['speed']), str(j['is_current']), str(j['initiative']))
 
