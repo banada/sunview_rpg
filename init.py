@@ -1,2 +1,2 @@
-#Server startup code will go here
+#Server startup code
 

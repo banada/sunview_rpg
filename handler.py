@@ -7,6 +7,7 @@ import json
 class FormPage(Resource):
     def render_GET(self, request):
         get_path = str(request.content.read())
+        print get_path
         path = str('./'+get_path)
         with open(path, 'rb') as fd:
             get_file = fd.read()
@@ -29,6 +30,7 @@ class FormPage(Resource):
             fd.write(r)
             fd.close()
         return path
+
 
 root = Resource()
 root.putChild("post", FormPage())
