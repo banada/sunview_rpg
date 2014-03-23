@@ -44,7 +44,7 @@ class battlemap:
 
 		self.testcharlist.append(character("testchar", "redtri", 0, 0, 30))
 		self.testcharlist.append(character("testchar", "redtri", 5, 5, 30))
-
+ 
 	def update(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT: sys.exit()
