@@ -119,15 +119,17 @@ def create_map(x_dim, y_dim):
             terr = terrain(i, ii, "grass")
             x.append(terr)
         map_1.append(x)
-    print map_1[0][0].ttype
-    map_1[0][0].update("door")
-    print map_1[0][0].ttype
+
+#Testing
+#    print map_1[0][0].ttype
+#    map_1[0][0].update("door")
+#    print map_1[0][0].ttype
 
 #Testing
 #ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
 ##ptf.update(1,1,0)
 #ptf.get()
-t = terrain(5,5,"grass")
-t.post()
+#t = terrain(5,5,"grass")
+#t.post()
 ##create_map(5,5)
 
