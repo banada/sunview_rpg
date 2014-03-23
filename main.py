@@ -1,16 +1,18 @@
 import os, sys, pygame
-from init import *
+from classes import *
 import msvcrt as m
 import glob
 from helper import *
 from ui import *
 import sgc
+import socket
 from sgc.locals import *
 from pygame.locals import *
 
 pygame.display.init()
 pygame.font.init()
 
+socket.accept()
 
 def loadImageDict():
 	global imgDict
@@ -36,37 +38,38 @@ class battlemap:
 		self.testcharlist = []
 
 		if isdm:	
-			self.rad = radio_set("dmSelect",["wall","door","enemy","player"], (self.gridsize[0]-150, 100))
+			self.rad = radio_set("dmSelect",["wall","door","enemy","player"], (self.size[0]-150, 100))
 			for rad in self.rad.radio_buttons:
 				rad.add(0)
 			
 
-		self.create_testgrid()
+		self.create_inigrid()
 
-	def create_testgrid(self):
+	def create_inigrid(self):
 		## update grid objects in grid
 		for x in xrange(self.gridsize[0]):
 			for y in xrange(self.gridsize[1]):
 				if (y*x)%3 == 0:
-					self.testgrid[x][y] = terrain(x,y,'water')
+					self.grid[x][y] = terrain(x,y,'water')
 				elif (y*x)%3 == 1:
-					self.testgrid[x][y] = terrain(x,y,'door')
+					self.grid[x][y] = terrain(x,y,'door')
 				elif (y*x)%3 == 2:
-					self.testgrid[x][y] = terrain(x,y,'wall')
+					self.grid[x][y] = terrain(x,y,'wall')
+ 				self.grid[x][y].post()
+ 				print "added cell " + str(x) +"_"+ str(y)
 
-		self.testcharlist.append(character("testchar", "redtri", 0, 0, 30))
-		self.testcharlist.append(character("testchar", "redtri", 5, 5, 30))
- 
 	def update(self):
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT: sys.exit()
 
-		self.screen.fill((0,0,0))
+		self.screen.fill((150,150,150))
 
 		## update grid objects in grid
 		for x in xrange(self.gridsize[0]):
 			for y in xrange(self.gridsize[1]):
-				self.grid[x][y] = self.testgrid[x][y]
+				self.grid[x][y].get()
+
+
 
 		## render new object set
 		for x in xrange(self.gridsize[0]):
@@ -113,7 +116,7 @@ class battlemap:
 
 def main():
 	clock = pygame.time.Clock()
-	bmap = battlemap(36,26,1)
+	bmap = battlemap(5,5,1)
 	while(1):
 		time = clock.tick(30)
 		for event in pygame.event.get():
