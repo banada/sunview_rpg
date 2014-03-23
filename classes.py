@@ -102,11 +102,14 @@ class terrain:
         self.update(str(j['ttype']))
 
     def post(self):
+        print 1
         data = json.dumps({'class':'terrain',
                            'x':str(self.x),
                            'y':str(self.y),
                            'ttype':str(self.ttype)})
+        print 2
         request = requests.post('http://localhost:8080/post', data=data)
+        print 3
 
 
 

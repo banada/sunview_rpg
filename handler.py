@@ -15,9 +15,11 @@ class FormPage(Resource):
         return get_file
 
     def render_POST(self, request):
+        print 1
         r = request.content.read()
         j = json.loads(r)
         d = json.dumps(r)
+        print 2
         if str(j['class']) == 'character':
             post_path = str(j['safe_name'])
         elif str(j['class']) == 'terrain':
@@ -25,10 +27,12 @@ class FormPage(Resource):
         else:
             post_path = "dummy.log"
             print "WRITING TO DUMMY LOG"
+        print 3
         path = str('./JSON/'+post_path)
         with open(path, 'w') as fd:
             fd.write(r)
             fd.close()
+        print 4
         return path
 
 
