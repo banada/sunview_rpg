@@ -52,12 +52,14 @@ class character:
                        'initiative':str(self.initiative)}, outfile)
 
     def get(self):
-        request = requests.get('http://localhost:8080/JSON/'+self.safe_name)
+        data = "JSON/"+self.safe_name
+        request = requests.get('http://localhost:8080/post', data=data)
         j = json.loads(request.text)
         self.update(str(j['x']), str(j['y']), str(j['speed']), str(j['is_current']), str(j['initiative']))
 
     def post(self):
-        payload = json.dumps({'name':str(self.name),
+        data = json.dumps({'name':str(self.name),
+                       'safe_name':str(self.safe_name),
                        'ctype':str(self.ctype),
                        'x':str(self.x), 
                        'y':str(self.y),
@@ -65,7 +67,7 @@ class character:
                        'is_player':str(self.is_player),
                        'is_current':str(self.is_current),
                        'initiative':str(self.initiative)})
-        request = requests.get('http://localhost:8000/JSON/'+self.safe_name, payload)
+        request = requests.post('http://localhost:8080/post', data=data)
 
 #Points on the grid
 class terrain:
@@ -106,7 +108,8 @@ def create_map(x_dim, y_dim):
     print map_1[0][0].ttype
 
 #Testing
-##ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
+ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
 ##ptf.update(1,1,0)
-
+ptf.get()
 ##create_map(5,5)
+
