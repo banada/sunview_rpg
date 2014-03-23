@@ -108,8 +108,8 @@ def create_map(x_dim, y_dim):
     print map_1[0][0].ttype
 
 #Testing
-ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
+##ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
 ##ptf.update(1,1,0)
-ptf.get()
+##ptf.get()
 ##create_map(5,5)
 

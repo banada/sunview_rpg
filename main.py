@@ -2,7 +2,8 @@ import os, sys, pygame
 from init import *
 import msvcrt as m
 import glob
-from edit import *
+from helper import *
+from ui import *
 import sgc
 from sgc.locals import *
 from pygame.locals import *
@@ -35,8 +36,10 @@ class battlemap:
 		self.testcharlist = []
 
 		if isdm:	
-			btn = sgc.Button(label="Clicky", pos=(self.size[0]-100, 100))
-			btn.add(0)
+			self.rad = radio_set("dmSelect",["wall","door","enemy","player"], (self.gridsize[0]-150, 100))
+			for rad in self.rad.radio_buttons:
+				rad.add(0)
+			
 
 		self.create_testgrid()
 
@@ -114,6 +117,7 @@ def main():
 	while(1):
 		time = clock.tick(30)
 		for event in pygame.event.get():
+			print event
 			sgc.event(event)
 			if event.type == pygame.QUIT:
 				return
