@@ -18,8 +18,8 @@ class character:
         self.is_player = is_player
         self.is_current = is_current
         self.initiative = initiative
-        print(str(self.ctype)+" character "+str(self.name)+" created: ("\
-             +str(self.x)+","+str(self.y)+"), "+str(self.speed)+" speed")
+        #print(str(self.ctype)+" character "+str(self.name)+" created: ("\
+        #     +str(self.x)+","+str(self.y)+"), "+str(self.speed)+" speed")
         self.json()
  
     #Change character position/stats - all args optional
@@ -34,8 +34,8 @@ class character:
             self.is_current = is_current_new
         if initiative_new >= 0:
             self.initiative = initiative_new
-        print("Updated character "+str(self.name)+": (" \
-              +str(self.x)+","+str(self.y)+"), "+str(self.speed)+" speed")
+        #print("Updated character "+str(self.name)+": (" \
+        #      +str(self.x)+","+str(self.y)+"), "+str(self.speed)+" speed")
         self.json()
 
     #Writes current self.* to disk as JSON
@@ -73,15 +73,15 @@ class terrain:
         self.x = x
         self.y = y
         self.ttype = ttype
-        print("Terrain point created at: (" \
-               +str(self.x)+","+str(self.y)+"), type: "+str(self.ttype))
+        #print("Terrain point created at: (" \
+        #       +str(self.x)+","+str(self.y)+"), type: "+str(self.ttype))
         self.json()
     
     def update(self, ttype_new):
         self.ttype = ttype_new
-        print("Terrain point (" \
-               +str(self.x)+","+str(self.y)+\
-               "), is now type: "+str(self.ttype))
+        #print("Terrain point (" \
+        #       +str(self.x)+","+str(self.y)+\
+        #       "), is now type: "+str(self.ttype))
         self.json()
 
     #Writes current self.* to disk as JSON
@@ -106,7 +106,7 @@ def create_map(x_dim, y_dim):
     print map_1[0][0].ttype
 
 #Testing
-ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
-ptf.update(1,1,0)
+##ptf = character("Perezoso the Folivore", "sloth", 0, 0, 1)
+##ptf.update(1,1,0)
 
-create_map(5,5)
+##create_map(5,5)
